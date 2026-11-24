@@ -10,7 +10,7 @@ header('Referrer-Policy: no-referrer');
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>App Stats — Dashboard</title>
+  <title>App Stats Tracker — Dashboard</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -24,7 +24,7 @@ header('Referrer-Policy: no-referrer');
           </svg>
         </div>
         <div>
-          <h1 class="brand-title">App Stats</h1>
+          <h1 class="brand-title">App Stats Tracker</h1>
           <p class="brand-subtitle" data-i18n="subtitle">Statistiques anonymes &amp; multi-langages (PHP)</p>
         </div>
       </div>
@@ -182,7 +182,7 @@ header('Referrer-Policy: no-referrer');
   </div>
 
   <footer class="footer">
-    <span>App Stats by <strong>VITTHEO</strong> — PHP · Python · Java · C · C# · Rust</span>
+    <span>App Stats Tracker by <strong>VITTHEO</strong> — PHP · Python · Java · C · C# · Rust</span>
   </footer>
 
   <script src="app.js"></script>
