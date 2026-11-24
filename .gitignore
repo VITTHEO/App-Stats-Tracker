@@ -1,0 +1,41 @@
+# Data & SQLite
+data/
+web/data/*.db
+web/data/*.db-shm
+web/data/*.db-wal
+*.db
+*.db-shm
+*.db-wal
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Java
+*.class
+*.jar
+
+# C / C++
+*.o
+*.obj
+*.exe
+*.out
+sdks/c/example
+
+# C# / .NET
+bin/
+obj/
+*.user
+
+# Rust
+target/
+sdks/rust/example
+
+# OS & IDEs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.env

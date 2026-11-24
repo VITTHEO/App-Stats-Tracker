@@ -1,0 +1,110 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test-php-site-and-sdks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: pdo_sqlite
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install libcurl dev headers for C SDK
+        run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev
+
+      - name: Lint all PHP files
+        run: |
+          for f in web/*.php tests/*.php; do
+            php -l "$f"
+          done
+
+      - name: Run PHP unit tests
+        run: php tests/test_php.php
+
+      - name: End-to-end test all 5 SDKs against live PHP server
+        run: |
+          set -e
+          export APP_STATS_DB="/tmp/ci_stats.db"
+          export APP_STATS_URL="http://127.0.0.1:18080"
+
+          php -S 127.0.0.1:18080 -t web web/router.php &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID 2>/dev/null || true" EXIT
+
+          for i in $(seq 1 20); do
+            if curl -sf "$APP_STATS_URL/api/v1/health" > /dev/null; then
+              break
+            fi
+            sleep 0.25
+          done
+
+          echo "=== Verifying PHP Dashboard ==="
+          curl -sf "$APP_STATS_URL/" | grep -q "App Stats"
+
+          echo "=== Testing Python SDK ==="
+          python sdks/python/example.py
+
+          echo "=== Testing Java SDK ==="
+          javac sdks/java/AppStats.java sdks/java/Example.java
+          java -cp sdks/java Example
+
+          echo "=== Testing C SDK (libcurl) ==="
+          gcc -Wall -Wextra sdks/c/example.c -lcurl -o /tmp/c_example
+          /tmp/c_example
+
+          echo "=== Testing C SDK (pure POSIX sockets, no curl) ==="
+          gcc -Wall -Wextra -DAPP_STATS_NO_CURL sdks/c/example.c -o /tmp/c_example_nocurl
+          /tmp/c_example_nocurl
+
+          echo "=== Testing C# SDK ==="
+          dotnet run --project sdks/csharp/example/Example.csproj
+
+          echo "=== Testing Rust SDK ==="
+          rustc --edition 2021 -D warnings sdks/rust/example.rs -o /tmp/rust_example
+          /tmp/rust_example
+
+          echo "=== Verifying all 5 SDKs recorded stats via PHP API ==="
+          php -r '
+            $json = file_get_contents("http://127.0.0.1:18080/api/v1/stats");
+            $data = json_decode($json, true);
+            $sdks = array_column($data["by_sdk"], "sdk");
+            echo "Recorded SDKs: " . implode(", ", $sdks) . "\n";
+            foreach (["python", "java", "c", "csharp", "rust"] as $req) {
+              if (!in_array($req, $sdks, true)) {
+                fwrite(STDERR, "Missing SDK: $req\n");
+                exit(1);
+              }
+            }
+            if ($data["totals"]["total_uses"] < 6) {
+              fwrite(STDERR, "Expected at least 6 total uses\n");
+              exit(1);
+            }
+            echo "ALL 5 SDKS VERIFIED AGAINST PHP SITE!\n";
+          '

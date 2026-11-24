@@ -1,0 +1,16 @@
+services:
+  app-stats:
+    build: .
+    container_name: app-stats
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      APP_STATS_DB_DRIVER: "sqlite"
+      APP_STATS_DB: "/var/www/html/data/stats.db"
+      # Décommentez pour sécuriser l'envoi ou la consultation :
+      # APP_STATS_API_KEY: "votre-cle-api-secrete"
+      # APP_STATS_ADMIN_KEY: "votre-cle-admin-secrete"
+      APP_STATS_RATE_LIMIT: "120"
+    volumes:
+      - ./data:/var/www/html/data

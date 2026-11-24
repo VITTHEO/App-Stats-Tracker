@@ -1,0 +1,20 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Bloquer l'accès direct à la base de données et aux fichiers internes
+  RewriteRule ^(data/.*|config\.php|db\.php|router\.php)$ - [F,L]
+
+  # Router l'API REST vers api.php
+  RewriteRule ^api(?:/v1)?/(track|stats|export\.csv|health)/?$ api.php?route=$1 [L,QSA]
+  RewriteRule ^health/?$ api.php?route=health [L,QSA]
+</IfModule>
+
+<FilesMatch "^(config\.php|db\.php|router\.php|.*\.db|.*\.sqlite)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
