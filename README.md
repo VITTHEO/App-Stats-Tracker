@@ -2,10 +2,18 @@
 
 *by **VITTHEO***
 
-![CI](https://img.shields.io/badge/CI-GitHub%20Actions-blue?logo=githubactions)
-![Site](https://img.shields.io/badge/Site-PHP%208%2B-777BB4?logo=php&logoColor=white)
-![License](https://img.shields.io/badge/license-MIT-green)
-![SDKs](https://img.shields.io/badge/SDKs-Python%20%7C%20Java%20%7C%20C%20%7C%20C%23%20%7C%20Rust-4f8cff)
+![Views](https://komarev.com/ghpvc/?username=VITTHEO-app-stats-tacker&label=VIEWS&color=blueviolet&style=for-the-badge)
+![Downloads](https://img.shields.io/github/downloads/VITTHEO/app-stats-tacker/total?style=for-the-badge&logo=github&label=DOWNLOADS&color=10b981)
+![Stars](https://img.shields.io/github/stars/VITTHEO/app-stats-tacker?style=for-the-badge&logo=github&label=STARS&color=f59e0b)
+[![CI](https://img.shields.io/github/actions/workflow/status/VITTHEO/app-stats-tacker/ci.yml?style=for-the-badge&logo=githubactions&logoColor=white&label=CI)](https://github.com/VITTHEO/app-stats-tacker/actions)
+![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)
+
+![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![C](https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white)
+![C Sharp](https://img.shields.io/badge/C_Sharp-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)
 
 **App Stats Tracker** est une solution légère, open-source et auto-hébergeable composée d'un **site web & API 100 % PHP** (zéro dépendance, compatible hébergement mutualisé) et d'**un seul fichier SDK autonome** pour **Python, Java, C, C# et Rust**.
 
